@@ -3,5 +3,5 @@ Members:
 1. Feta Jordan
 2. Nambuya Gloria 
 3. Semu Joshua 
-4. Ampaire Collen
+4. Ampaire Colleen
 5. Mbabazi Natasha Alupo
