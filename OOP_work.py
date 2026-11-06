@@ -59,3 +59,9 @@ class Student(Person):
         print(f"[{self.name}] Issue reported for Agreement {agreement.agreement_id}: '{description}'")
         warden.receive_escalated_issue(issue)
         return issue
+print("\n-- 2.CREATING ITEM CAREGORIES & LISTINGS --")
+cat_academics = ItemCategory("CO1", "Academics","Textbooks and academic gear")
+calculator =Item("I101","ScientificCalculator FX-PP1EX","Casio calculator",owner_id=alice.user_id,category=cat_academics)
+alice.add_owned_item(calculator)
+
+print(calculator.get_item_details())
