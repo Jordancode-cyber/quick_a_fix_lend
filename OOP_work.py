@@ -65,3 +65,31 @@ calculator =Item("I101","ScientificCalculator FX-PP1EX","Casio calculator",owner
 alice.add_owned_item(calculator)
 
 print(calculator.get_item_details())
+
+class ItemCategory:
+    def __init__(self, category_id, category_name, description):
+        self.category_id = category_id
+        self.category_name = category_name
+        self.description = description
+
+    def get_category_details(self):
+        return f"Category: {self.category_name} ({self.description})"
+
+class Item:
+    def __init__(self, item_id, title, description, owner_id, category):
+        self.item_id = item_id
+        self.title = title
+        self.description = description
+        self.owner_id = owner_id
+        self.category = category
+        self._is_available = True
+
+    def is_available(self):
+        return self._is_available    
+
+    def set_availability(self, status):
+        self._is_available = status
+
+    def get_item_details(self):
+        status_str = "Available" if self.is_available else "borrowed"
+        return f"Item[{self.item_id}]: {self.title} status: {status_str} owner: {self.owner_id}"        
