@@ -59,12 +59,49 @@ class Student(Person):
         print(f"[{self.name}] Issue reported for Agreement {agreement.agreement_id}: '{description}'")
         warden.receive_escalated_issue(issue)
         return issue
-print("\n-- 2.CREATING ITEM CAREGORIES & LISTINGS --")
-cat_academics = ItemCategory("CO1", "Academics","Textbooks and academic gear")
-calculator =Item("I101","ScientificCalculator FX-PP1EX","Casio calculator",owner_id=alice.user_id,category=cat_academics)
-alice.add_owned_item(calculator)
 
-print(calculator.get_item_details())
+class Warden(Person):
+    def __init__(self, warden_id, name, contact, hostel_id):
+        super().__init__(warden_id, name, contact)
+        self.hostel_id = hostel_id
+        self.pending_issues: List[Issue] = []
+
+    def assign_room(self, student, room_number):
+        student.room_number = room_number
+        print(f"[Warden {self.name}] Assigned Room {room_number} to Student {student.name}.")
+
+    def receive_escalated_issue(self, issue):
+        self.pending_issues.append(issue)
+        print(f"[Warden {self.name}] Received Issue: [{issue.issue_id}] regarding Agreement {issue.agreement.agreement_id}.")
+
+    def calculate_fine(self, issue, days_overdue):
+        rate = issue.agreement.condition.damage_fine_per_day
+        return days_overdue * rate
+
+    def resolve_issue(self, issue, days_overdue, resolution_notes):
+        fine = self.calculate_fine(issue, days_overdue)
+        issue.resolve(fine, resolution_notes)
+        if issue in self.pending_issues:
+            self.pending_issues.remove(issue)
+        print(f"[Warden {self.name}] Issue [{issue.issue_id}] resolved. Fine levied: ${fine:.2f}. Notes: {resolution_notes}")
+
+
+class Hostel:
+    def __init__(self, hostel_id, name, total_rooms):
+        self.hostel_id = hostel_id
+        self.name = name
+        self.total_rooms = total_rooms
+        self.students: List[Student] = []
+
+    def add_student(self, student):
+        self.students.append(student)
+        print(f"[{self.name}] Registered student: {student.name}.")
+
+    def remove_student(self, student_id):
+        self.students = [s for s in self.students if s.user_id != student_id]
+        print(f"[{self.name}] Removed student ID: {student_id}.")
+if __name__ == "__main__":
+
 
 class ItemCategory:
     def __init__(self, category_id, category_name, description):
@@ -93,3 +130,13 @@ class Item:
     def get_item_details(self):
         status_str = "Available" if self.is_available else "borrowed"
         return f"Item[{self.item_id}]: {self.title} status: {status_str} owner: {self.owner_id}"        
+
+
+##Demo
+
+print("\n--CREATING ITEM CAREGORIES & LISTINGS --")
+cat_academics = ItemCategory("CO1", "Academics","Textbooks and academic gear")
+calculator =Item("I101","ScientificCalculator FX-PP1EX","Casio calculator",owner_id=alice.user_id,category=cat_academics)
+alice.add_owned_item(calculator)
+
+print(calculator.get_item_details())
