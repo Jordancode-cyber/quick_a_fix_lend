@@ -1,3 +1,19 @@
+class Person:
+    def __init__(self, user_id, name, contact):
+        self._user_id = user_id
+        self._name = name
+        self._contact = contact
+    @property
+    def user_id(self):
+        return self._user_id
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def contact(self):
+        return self._contact
 from datetime import datetime
 from typing import List
 
@@ -145,9 +161,20 @@ class Agreement:
             self._status = "Overdue"
             return True
         return self._status == "Overdue"
+        print("--- 1. INITIALIZING HOSTEL & USERS ---")
+    hostel = Hostel("H01", "Lumumba Hostel", 100)
+    warden = Warden("W01", "Dr. Okello", "+256-700-111222", hostel.hostel_id)
+    
+    alice = Student("S01", "Alice", "+256-700-333444", "Room A1", hostel.hostel_id)
+    bob = Student("S02", "Bob", "+256-700-555666", "Room B2", hostel.hostel_id)
+    
+    hostel.add_student(alice)
+    hostel.add_student(bob)
 
 
+    
     print("\n--- 3. Borrowing Process ---")
     now = datetime.now()
     period = Period(period_id=1, start_time=now, end_time=now + timedelta(days=7))
-    condition = Conditions("CONDO1", "Good Condition", "Return without scratches", damage_fine_per_hour=2.50)       
+    condition = Conditions("CONDO1", "Good Condition", "Return without scratches", damage_fine_per_hour=2.50)  
+    
